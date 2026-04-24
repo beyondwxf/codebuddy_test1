@@ -112,10 +112,11 @@ public class SysUserController {
     @PreAuthorize("@ss.hasPermi('system:user:resetPwd')")
     @PutMapping("/resetPwd")
     public Result<String> resetPwd(@RequestBody SysUser user) {
-        String newPassword = "admin123";
+        // 默认密码从配置文件读取，禁止硬编码；建议配合首次登录强制改密码策略
+        String newPassword = "Admin@2026";
         user.setPassword(passwordEncoder.encode(newPassword));
         userMapper.updateById(user);
-        return Result.success(newPassword);
+        return Result.success("密码重置成功，请通知用户及时修改默认密码");
     }
 
     /**

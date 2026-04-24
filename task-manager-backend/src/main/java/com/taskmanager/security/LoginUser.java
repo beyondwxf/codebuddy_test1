@@ -69,13 +69,13 @@ public class LoginUser implements UserDetails {
     @Override
     @JsonIgnore
     public String getPassword() {
-        return user.getPassword();
+        return user != null ? user.getPassword() : null;
     }
 
     @Override
     @JsonIgnore
     public String getUsername() {
-        return user.getUserName();
+        return user != null ? user.getUserName() : null;
     }
 
     @Override
@@ -99,6 +99,10 @@ public class LoginUser implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() {
+        // 空值保护：user 为 null 时返回 false，防止 NPE
+        if (user == null) {
+            return false;
+        }
         // 根据 status 字段判断：0=正常启用，1=停用
         return "0".equals(user.getStatus());
     }

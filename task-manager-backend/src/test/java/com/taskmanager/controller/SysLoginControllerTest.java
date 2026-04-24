@@ -126,6 +126,7 @@ class SysLoginControllerTest {
     @Test
     @DisplayName("用户登录 - 成功")
     void login_success() throws Exception {
+        // 验证码已启用：不传 uuid/code 时跳过验证码校验（兼容无验证码场景）
         LoginUser loginUser = buildTestLoginUser();
         Authentication auth = buildAuthentication(loginUser);
 
@@ -134,8 +135,11 @@ class SysLoginControllerTest {
         when(tokenService.createToken(any(LoginUser.class))).thenReturn("test-token-123");
 
         mockMvc.perform(post("/api/auth/login")
-                .param("userName", "admin")
-                .param("password", "admin123"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of(
+                    "userName", "admin",
+                    "password", "admin123"
+                ))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value(200))
             .andExpect(jsonPath("$.data.token").value("test-token-123"))
@@ -154,10 +158,13 @@ class SysLoginControllerTest {
         when(tokenService.createToken(any(LoginUser.class))).thenReturn("test-token-123");
 
         mockMvc.perform(post("/api/auth/login")
-                .param("userName", "admin")
-                .param("password", "admin123")
-                .param("uuid", "test-uuid")
-                .param("code", "ABCD"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of(
+                    "userName", "admin",
+                    "password", "admin123",
+                    "uuid", "test-uuid",
+                    "code", "ABCD"
+                ))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value(200))
             .andExpect(jsonPath("$.data.token").value("test-token-123"));
@@ -169,10 +176,13 @@ class SysLoginControllerTest {
         doThrow(new RuntimeException("验证码错误")).when(captchaService).validateCaptcha(anyString(), anyString());
 
         mockMvc.perform(post("/api/auth/login")
-                .param("userName", "admin")
-                .param("password", "admin123")
-                .param("uuid", "test-uuid")
-                .param("code", "WRONG"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of(
+                    "userName", "admin",
+                    "password", "admin123",
+                    "uuid", "test-uuid",
+                    "code", "WRONG"
+                ))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value(500))
             .andExpect(jsonPath("$.message").value("验证码错误"));

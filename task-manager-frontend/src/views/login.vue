@@ -61,8 +61,9 @@
         </el-form-item>
       </el-form>
 
-      <div class="login-tip">
-        <span>默认账号: <strong>admin</strong> / <strong>admin</strong></span>
+      <!-- 开发环境提示（生产构建时自动隐藏） -->
+      <div class="login-tip" v-show="isDev">
+        <span>开发环境默认账号: <strong>admin</strong></span>
       </div>
     </div>
 
@@ -76,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getCaptcha, login } from '@/api/auth'
@@ -88,6 +89,8 @@ const loginFormRef = ref(null)
 const loading = ref(false)
 const captchaEnabled = ref(false)
 const captchaUrl = ref('')
+// 开发环境标识：生产构建时自动为 false
+const isDev = import.meta.env.DEV
 
 const loginForm = ref({
   userName: 'admin',
@@ -103,7 +106,18 @@ const loginRules = {
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 1, message: '请输入密码', trigger: 'blur' }
   ],
-  code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+  // 验证码仅在启用时必填
+  code: [{
+    required: () => captchaEnabled.value,
+    validator: (rule, value, callback) => {
+      if (captchaEnabled.value && (!value || value.trim() === '')) {
+        callback(new Error('请输入验证码'))
+      } else {
+        callback()
+      }
+    },
+    trigger: 'blur'
+  }]
 }
 
 // 获取验证码
@@ -132,8 +146,12 @@ const handleLogin = () => {
       router.push(redirect)
       ElMessage.success('登录成功')
     } catch {
-      // 登录失败不再刷新验证码
-      // refreshCaptcha()
+      // 登录失败自动刷新验证码（防止暴力重试）
+      if (captchaEnabled.value) {
+        refreshCaptcha()
+        // 清空旧验证码输入
+        loginForm.value.code = ''
+      }
     } finally {
       loading.value = false
     }
@@ -141,8 +159,8 @@ const handleLogin = () => {
 }
 
 onMounted(() => {
-  // 验证码已禁用，不再自动获取
-  // refreshCaptcha()
+  // 页面加载时自动获取验证码
+  refreshCaptcha()
 })
 </script>
 

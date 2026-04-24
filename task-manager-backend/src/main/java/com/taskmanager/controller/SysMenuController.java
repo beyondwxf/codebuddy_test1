@@ -77,6 +77,8 @@ public class SysMenuController {
         if (childCount > 0) {
             return Result.error(500, "存在子菜单，不允许删除");
         }
+        // 注意：sys_menu 表无 del_flag 字段，使用物理删除
+        // 如需改为逻辑删除，需先给 sys_menu 表和 SysMenu 实体添加 del_flag 字段
         menuMapper.deleteById(menuId);
         return Result.success();
     }

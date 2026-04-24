@@ -20,8 +20,14 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         // 允许携带 Cookie 等凭证信息
         config.setAllowCredentials(true);
-        // 允许所有来源（生产环境应指定具体域名）
-        config.addAllowedOriginPattern("*");
+        // 生产环境应限制为前端部署域名列表，禁止通配符
+        String[] allowedOrigins = {
+            "http://localhost:3000",
+            "http://localhost:5173"
+        };
+        for (String origin : allowedOrigins) {
+            config.addAllowedOrigin(origin);
+        }
         // 允许所有请求头
         config.addAllowedHeader("*");
         // 允许所有请求方法

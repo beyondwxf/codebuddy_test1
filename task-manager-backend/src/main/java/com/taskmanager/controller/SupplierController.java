@@ -163,15 +163,15 @@ public class SupplierController {
         EasyExcel.read(file.getInputStream(), Supplier.class,
                 new PageReadListener<Supplier>(dataList -> {
                     for (Supplier supplier : dataList) {
+                        count[0]++; // 先递增行号，确保报错信息行号准确
                         try {
                             // 清除主键，避免重复导入时 ID 冲突（IdType.AUTO 会自动生成新ID）
                             supplier.setSupplierId(null);
                             supplier.setDelFlag("0");
                             supplierMapper.insert(supplier);
-                            count[0]++;
                         } catch (Exception e) {
                             failCount[0]++;
-                            failMsg.append("第").append(count[0] + failCount[0])
+                            failMsg.append("第").append(count[0])
                                     .append("行[").append(supplier.getCompanyName()).append("]导入失败：")
                                     .append(e.getMessage()).append("; ");
                         }

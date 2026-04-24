@@ -26,7 +26,7 @@
         <hutool.version>5.8.25</hutool.version>
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
-        <mockito.version>5.7.0</mockito.version>
+        <mockito.version>5.14.2</mockito.version>
     </properties>
 
     <dependencies>
@@ -140,26 +140,22 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>5.2.0</version>
-            <scope>test</scope>
-        </dependency>
+        <!-- Mockito 由 spring-boot-starter-test 传递引入，无需单独声明 mockito-inline -->
+        <!-- mockito.version 属性用于通过 Spring Boot BOM 覆盖版本 -->
     </dependencies>
 
     <repositories>
-        <!-- 阿里云公共仓库（包含 Maven Central 和其他公共包） -->
+        <!-- Maven Central（优先，确保 Mockito 等新版本可用） -->
+        <repository>
+            <id>maven-central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <!-- 阿里云公共仓库（作为加速镜像） -->
         <repository>
             <id>aliyun-public</id>
             <name>Aliyun Public Repository</name>
             <url>https://maven.aliyun.com/repository/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
 
@@ -194,7 +190,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED</argLine>
+                    <argLine>
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens java.base/sun.reflect.annotation=ALL-UNNAMED
+                        --add-opens java.base/sun.security.util=ALL-UNNAMED
+                        -Dnet.bytebuddy.experimental=true
+                    </argLine>
                 </configuration>
             </plugin>
         </plugins>

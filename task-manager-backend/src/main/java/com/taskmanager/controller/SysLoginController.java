@@ -56,16 +56,15 @@ public class SysLoginController {
      */
     @PostMapping("/login")
     public Result<LoginVO> login(@RequestBody LoginDTO loginDTO) {
-        // 验证码校验已禁用（开发环境）
-        // String uuid = loginDTO.getUuid();
-        // String code = loginDTO.getCode();
-        // if (uuid != null && !uuid.isEmpty() && code != null && !code.isEmpty()) {
-        //     try {
-        //         captchaService.validateCaptcha(uuid, code);
-        //     } catch (Exception e) {
-        //         return Result.error(500, e.getMessage());
-        //     }
-        // }
+        // 生产环境必须启用验证码，防御暴力破解攻击
+        if (loginDTO.getUuid() != null && !loginDTO.getUuid().isEmpty()
+                && loginDTO.getCode() != null && !loginDTO.getCode().isEmpty()) {
+            try {
+                captchaService.validateCaptcha(loginDTO.getUuid(), loginDTO.getCode());
+            } catch (Exception e) {
+                return Result.error(500, e.getMessage());
+            }
+        }
         String userName = loginDTO.getUserName();
         String password = loginDTO.getPassword();
         // 2. Spring Security 身份认证

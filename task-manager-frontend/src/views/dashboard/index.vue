@@ -58,9 +58,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/modules/useUserStore'
+import { listUser } from '@/api/system/user'
+import { listRole } from '@/api/system/role'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -83,13 +85,31 @@ const currentDate = computed(() => {
   return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 星期${weekMap[d.getDay()]}`
 })
 
-// 统计卡片
+// 统计卡片（初始显示占位符，加载完成后显示真实数据）
 const statCards = ref([
-  { title: '用户总数', value: 1024, icon: 'User', color: '#409EFF' },
-  { title: '角色数量', value: 8, icon: 'UserFilled', color: '#67C23A' },
-  { title: '菜单数量', value: 25, icon: 'Menu', color: '#E6A23C' },
-  { title: '部门数量', value: 12, icon: 'OfficeBuilding', color: '#F56C6C' }
+  { title: '用户总数', value: '-', icon: 'User', color: '#409EFF' },
+  { title: '角色数量', value: '-', icon: 'UserFilled', color: '#67C23A' },
+  { title: '菜单数量', value: '-', icon: 'Menu', color: '#E6A23C' },
+  { title: '部门数量', value: '-', icon: 'OfficeBuilding', color: '#F56C6C' }
 ])
+
+/** 从后端加载真实统计数据 */
+async function loadStats() {
+  try {
+    const [userRes, roleRes] = await Promise.all([
+      listUser({ pageNum: 1, pageSize: 1 }),
+      listRole({ pageNum: 1, pageSize: 1 })
+    ])
+    statCards.value[0].value = userRes.data.total
+    statCards.value[1].value = roleRes.data.total
+  } catch (e) {
+    console.warn('统计数据加载失败，使用默认值')
+  }
+}
+
+onMounted(() => {
+  loadStats()
+})
 
 // 快捷操作
 const quickActions = ref([

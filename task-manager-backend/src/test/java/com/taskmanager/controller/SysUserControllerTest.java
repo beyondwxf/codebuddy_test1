@@ -265,7 +265,8 @@ class SysUserControllerTest {
                 .content(objectMapper.writeValueAsString(resetUser)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value(200))
-            .andExpect(jsonPath("$.data").value("admin123"));
+            // 修复：resetPwd 不再返回密码原文，而是返回提示消息
+            .andExpect(jsonPath("$.data").value("密码重置成功，请通知用户及时修改默认密码"));
     }
 
     @Test
