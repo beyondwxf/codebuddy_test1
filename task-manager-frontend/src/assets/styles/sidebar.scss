@@ -1,0 +1,58 @@
+@mixin sidebar-transition {
+  transition: width 0.28s ease;
+}
+
+// Logo 区域
+.sidebar-logo {
+  height: $navbar-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2b2f3a;
+  cursor: pointer;
+  overflow: hidden;
+
+  .logo-title {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: opacity 0.28s;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    font-size: 24px;
+    color: $--color-primary;
+  }
+}
+
+// 侧边栏菜单
+.el-menu {
+  border-right: none !important;
+  background: $sidebar-bg;
+
+  .el-menu-item,
+  .el-sub-menu__title {
+    height: 50px;
+    line-height: 50px;
+    color: #bfcbd9 !important;
+
+    &:hover {
+      background: $sidebar-hover-bg !important;
+    }
+
+    .el-icon {
+      font-size: 18px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+  }
+
+  .el-menu-item.is-active {
+    color: $sidebar-active-text !important;
+    background: $sidebar-hover-bg !important;
+  }
+}

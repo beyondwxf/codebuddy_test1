@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taskmanager.mapper.SysMenuMapper">
+
+    <resultMap id="MenuResultMap" type="com.taskmanager.domain.SysMenu">
+        <id property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="path" column="path"/>
+        <result property="component" column="component"/>
+        <result property="query" column="query"/>
+        <result property="isFrame" column="is_frame"/>
+        <result property="isCache" column="is_cache"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="visible" column="visible"/>
+        <result property="status" column="status"/>
+        <result property="perms" column="perms"/>
+        <result property="icon" column="icon"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!-- 查询全部菜单树 -->
+    <select id="selectMenuTreeAll" resultMap="MenuResultMap">
+        SELECT * FROM sys_menu
+        WHERE status = '0'
+        ORDER BY parent_id, order_num ASC
+    </select>
+
+    <!-- 根据用户ID查询菜单树（通过角色关联） -->
+    <select id="selectMenuTreeByUserId" resultMap="MenuResultMap">
+        SELECT DISTINCT m.* FROM sys_menu m
+        LEFT JOIN sys_role_menu rm ON m.menu_id = rm.menu_id
+        LEFT JOIN sys_user_role ur ON rm.role_id = ur.role_id
+        WHERE ur.user_id = #{userId} AND m.status = '0'
+        ORDER BY m.parent_id, m.order_num ASC
+    </select>
+
+    <!-- 根据用户ID查询权限标识集合（按钮级权限控制核心SQL） -->
+    <select id="selectPermsByUserId" resultType="java.lang.String">
+        SELECT DISTINCT m.perms FROM sys_menu m
+        LEFT JOIN sys_role_menu rm ON m.menu_id = rm.menu_id
+        LEFT JOIN sys_user_role ur ON rm.role_id = ur.role_id
+        WHERE ur.user_id = #{userId} AND m.status = '0'
+          AND m.perms IS NOT NULL AND m.perms != ''
+    </select>
+
+    <!-- 根据角色ID查询菜单ID集合 -->
+    <select id="selectMenuIdsByRoleId" resultType="java.lang.Long">
+        SELECT menu_id FROM sys_role_menu WHERE role_id = #{roleId}
+    </select>
+</mapper>

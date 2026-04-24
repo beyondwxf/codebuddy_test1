@@ -1,0 +1,73 @@
+---
+description: 定义 SpringBoot 项目统一的 API 响应格式 Result<T> 类，包含成功/失败静态方法，Controller 层必须使用此格式返回。
+alwaysApply: false
+enabled: true
+updatedAt: 2026-04-21T10:02:07.365Z
+provider: 
+---
+
+# 统一响应格式 Result
+
+
+
+## 类定义示例（Java）
+
+```java
+
+public class Result<T> {
+
+    private int code;
+
+    private String message;
+
+    private T data;
+
+
+
+    public static <T> Result<T> success(T data) {
+
+        Result<T> result = new Result<>();
+
+        result.setCode(200);
+
+        result.setMessage("success");
+
+        result.setData(data);
+
+        return result;
+
+    }
+
+
+
+    public static <T> Result<T> error(int code, String message) {
+
+        Result<T> result = new Result<>();
+
+        result.setCode(code);
+
+        result.setMessage(message);
+
+        return result;
+
+    }
+
+}
+
+```
+
+
+
+## Controller 使用示例
+
+```java
+
+@GetMapping("/{id}")
+
+public Result<UserVO> getUser(@PathVariable Long id) {
+
+    return Result.success(userService.getById(id));
+
+}
+
+```

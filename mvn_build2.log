@@ -1,0 +1,7 @@
+﻿cmd.exe : The filename, directory name, or volume label syntax is incorrect.
+At line:1 char:164
++ ... ing]::UTF8; & cmd.exe /c "cd /d c:\dev\code\ai_code\codebuddy_test1\t ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (The filename, d...x is incorrect.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

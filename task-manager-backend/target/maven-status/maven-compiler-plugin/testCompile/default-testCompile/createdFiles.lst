@@ -1,0 +1,10 @@
+com\taskmanager\controller\SysDictTypeControllerTest.class
+com\taskmanager\controller\SysOperlogControllerTest.class
+com\taskmanager\controller\SysUserControllerTest.class
+com\taskmanager\controller\BaseControllerTest.class
+com\taskmanager\controller\SysDeptControllerTest.class
+com\taskmanager\controller\SysMenuControllerTest.class
+com\taskmanager\controller\SysDictDataControllerTest.class
+com\taskmanager\controller\SysLoginControllerTest.class
+com\taskmanager\controller\SysLogininforControllerTest.class
+com\taskmanager\controller\SysRoleControllerTest.class

@@ -1,0 +1,46 @@
+Picked up JAVA_TOOL_OPTIONS: -Djansi.strip=true
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-04-24T09:15:25.733+08:00  INFO 45088 --- [ruoyi-admin] [           main] com.taskmanager.TaskManagerApplication   : Starting TaskManagerApplication v1.0.0 using Java 25.0.1 with PID 45088 (C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\target\task-manager-backend-1.0.0.jar started by 51021 in c:\dev\code\ai_code\codebuddy_test1\task-manager-backend)
+2026-04-24T09:15:25.735+08:00  INFO 45088 --- [ruoyi-admin] [           main] com.taskmanager.TaskManagerApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-04-24T09:15:26.632+08:00  INFO 45088 --- [ruoyi-admin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-24T09:15:26.635+08:00  INFO 45088 --- [ruoyi-admin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-24T09:15:26.669+08:00  INFO 45088 --- [ruoyi-admin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 12 ms. Found 0 Redis repository interfaces.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (jar:nested:/C:/dev/code/ai_code/codebuddy_test1/task-manager-backend/target/task-manager-backend-1.0.0.jar/!BOOT-INF/lib/tomcat-embed-core-10.1.16.jar!/)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+2026-04-24T09:15:27.428+08:00  INFO 45088 --- [ruoyi-admin] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-24T09:15:27.439+08:00  INFO 45088 --- [ruoyi-admin] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-24T09:15:27.439+08:00  INFO 45088 --- [ruoyi-admin] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-04-24T09:15:27.493+08:00  INFO 45088 --- [ruoyi-admin] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-04-24T09:15:27.494+08:00  INFO 45088 --- [ruoyi-admin] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1678 ms
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by io.netty.util.internal.PlatformDependent0$4 (jar:nested:/C:/dev/code/ai_code/codebuddy_test1/task-manager-backend/target/task-manager-backend-1.0.0.jar/!BOOT-INF/lib/netty-common-4.1.101.Final.jar!/)
+WARNING: Please consider reporting this to the maintainers of class io.netty.util.internal.PlatformDependent0$4
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+ _ _   |_  _ _|_. ___ _ |    _ 
+| | |\/|_)(_| | |_\  |_)||_|_\ 
+     /               |         
+                        3.5.5 
+2026-04-24T09:15:28.267+08:00  INFO 45088 --- [ruoyi-admin] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-24T09:15:28.404+08:00  INFO 45088 --- [ruoyi-admin] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@16f4a3c0
+2026-04-24T09:15:28.405+08:00  INFO 45088 --- [ruoyi-admin] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-24T09:15:28.759+08:00  INFO 45088 --- [ruoyi-admin] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@62f37bfd, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1818d00b, org.springframework.security.web.context.SecurityContextHolderFilter@4fd92289, org.springframework.security.web.header.HeaderWriterFilter@44392e64, org.springframework.web.filter.CorsFilter@45f9d394, org.springframework.security.web.authentication.logout.LogoutFilter@dd060be, com.taskmanager.security.JwtAuthenticationFilter@2353354a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@287317df, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1fcc3461, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@b3a8455, org.springframework.security.web.session.SessionManagementFilter@3e2d65e1, org.springframework.security.web.access.ExceptionTranslationFilter@795eddda, org.springframework.security.web.access.intercept.AuthorizationFilter@16c0be3b]
+2026-04-24T09:15:30.114+08:00  WARN 45088 --- [ruoyi-admin] [           main] c.b.m.core.metadata.TableInfoHelper      : Can not find table primary key in Class: "com.taskmanager.domain.SysRoleMenu".
+2026-04-24T09:15:30.115+08:00  WARN 45088 --- [ruoyi-admin] [           main] c.b.m.core.injector.DefaultSqlInjector   : class com.taskmanager.domain.SysRoleMenu ,Not found @TableId annotation, Cannot use Mybatis-Plus 'xxById' Method.
+2026-04-24T09:15:30.123+08:00  WARN 45088 --- [ruoyi-admin] [           main] c.b.m.core.metadata.TableInfoHelper      : Can not find table primary key in Class: "com.taskmanager.domain.SysUserRole".
+2026-04-24T09:15:30.123+08:00  WARN 45088 --- [ruoyi-admin] [           main] c.b.m.core.injector.DefaultSqlInjector   : class com.taskmanager.domain.SysUserRole ,Not found @TableId annotation, Cannot use Mybatis-Plus 'xxById' Method.
+2026-04-24T09:15:30.170+08:00  INFO 45088 --- [ruoyi-admin] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-04-24T09:15:30.177+08:00  INFO 45088 --- [ruoyi-admin] [           main] com.taskmanager.TaskManagerApplication   : Started TaskManagerApplication in 4.964 seconds (process running for 5.519)
+2026-04-24T09:16:02.536+08:00  INFO 45088 --- [ruoyi-admin] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-24T09:16:02.537+08:00  INFO 45088 --- [ruoyi-admin] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-24T09:16:02.538+08:00  INFO 45088 --- [ruoyi-admin] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms

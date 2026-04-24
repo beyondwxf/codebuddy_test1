@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taskmanager.mapper.TaskMapper">
+
+    <!-- 分页查询任务列表（支持状态筛选和关键词搜索） -->
+    <select id="selectTaskPage" resultType="com.taskmanager.entity.Task">
+        SELECT id, title, description, completed, user_id, created_time
+        FROM task
+        WHERE user_id = #{userId}
+        <if test="status != null">
+            AND completed = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (title LIKE CONCAT('%', #{keyword}, '%')
+                 OR description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        ORDER BY created_time DESC
+    </select>
+
+    <!-- 根据用户ID查询所有任务 -->
+    <select id="selectByUserId" resultType="com.taskmanager.entity.Task">
+        SELECT id, title, description, completed, user_id, created_time
+        FROM task
+        WHERE user_id = #{userId}
+        ORDER BY created_time DESC
+    </select>
+
+    <!-- 更新任务状态 -->
+    <update id="updateStatus">
+        UPDATE task
+        SET completed = #{completed}
+        WHERE id = #{id} AND user_id = #{userId}
+    </update>
+
+    <!-- 根据ID和用户ID查询任务（用于权限校验） -->
+    <select id="selectByIdAndUserId" resultType="com.taskmanager.entity.Task">
+        SELECT id, title, description, completed, user_id, created_time
+        FROM task
+        WHERE id = #{id} AND user_id = #{userId}
+    </select>
+
+</mapper>

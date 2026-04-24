@@ -1,0 +1,13 @@
+{
+    "java.project.sourcePaths": [
+        "task-manager-backend/src/main/java/com/taskmanager/utils",
+        "task-manager-backend/src/main/java/com/taskmanager/security",
+        "task-manager-backend/src/main/java/com/taskmanager/mapper",
+        "task-manager-backend/src/main/java/com/taskmanager/entity",
+        "task-manager-backend/src/main/java/com/taskmanager/config",
+        "task-manager-backend/src/main/java/com/taskmanager"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "git.ignoreLimitWarning": true
+}
