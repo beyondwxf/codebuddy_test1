@@ -13,6 +13,8 @@ const COMPONENT_MAP = {
   'system/menu/index': () => import('@/views/system/menu/index.vue'),
   'system/dept/index': () => import('@/views/system/dept/index.vue'),
   'system/dict/index': () => import('@/views/system/dict/index.vue'),
+  // 供应商管理
+  'system/supplier/index': () => import('@/views/system/supplier/index.vue'),
   // 系统监控
   'monitor/operlog/index': () => import('@/views/monitor/operlog/index.vue'),
   'monitor/logininfor/index': () => import('@/views/monitor/logininfor/index.vue'),

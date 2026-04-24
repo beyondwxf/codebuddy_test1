@@ -26,6 +26,7 @@ com\taskmanager\common\Result.class
 com\taskmanager\domain\SysUserRole.class
 com\taskmanager\config\SecurityConfig.class
 com\taskmanager\mapper\SysRoleMapper.class
+com\taskmanager\controller\SupplierController.class
 com\taskmanager\controller\SysLoginController$RouterVO.class
 com\taskmanager\domain\SysOperLog.class
 com\taskmanager\controller\SysLoginController$RouterVO$MetaVO.class
@@ -47,7 +48,9 @@ com\taskmanager\config\RedisConfig.class
 com\taskmanager\entity\User.class
 com\taskmanager\security\LoginUser.class
 com\taskmanager\controller\SysRoleController.class
+com\taskmanager\mapper\SupplierMapper.class
 com\taskmanager\controller\SysLoginController$UserInfoVO.class
+com\taskmanager\domain\Supplier.class
 com\taskmanager\mapper\SysMenuMapper.class
 com\taskmanager\controller\SysMenuController.class
 com\taskmanager\TaskManagerApplication.class

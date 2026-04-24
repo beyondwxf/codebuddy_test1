@@ -314,3 +314,107 @@ INSERT INTO `sys_dict_data` VALUES (6,  1,  '正常', '0', 'sys_normal_disable',
 INSERT INTO `sys_dict_data` VALUES (7,  2,  '停用', '1', 'sys_normal_disable', '', 'danger',  'N', '0', 1, sysdate(), NULL, NULL, '停用');
 INSERT INTO `sys_dict_data` VALUES (12, 1,  '是',   'Y', 'sys_yes_no',      '',   'primary',   'Y', '0', 1, sysdate(), NULL, NULL, '是');
 INSERT INTO `sys_dict_data` VALUES (13, 2,  '否',   'N', 'sys_yes_no',      '',   'danger',    'N', '0', 1, sysdate(), NULL, NULL, '否');
+
+-- ----------------------------
+-- 11. 供应商表
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_supplier`;
+CREATE TABLE `sys_supplier` (
+    `supplier_id`     BIGINT        NOT NULL AUTO_INCREMENT COMMENT '供应商ID',
+    `company_name`    VARCHAR(200)  NOT NULL COMMENT '公司名称',
+    `province`        VARCHAR(50)   DEFAULT NULL COMMENT '省份',
+    `contact_person`  VARCHAR(50)   DEFAULT NULL COMMENT '联系人',
+    `phone1`          VARCHAR(20)   DEFAULT NULL COMMENT '电话1',
+    `phone2`          VARCHAR(20)   DEFAULT NULL COMMENT '电话2',
+    `phone3`          VARCHAR(20)   DEFAULT NULL COMMENT '电话3',
+    `phone4`          VARCHAR(20)   DEFAULT NULL COMMENT '电话4',
+    `contact_status`  VARCHAR(10)   DEFAULT '0' COMMENT '联系状态（0未联系 1已加微信 2未接 3空号 4已下单）',
+    `category`        VARCHAR(500)  DEFAULT NULL COMMENT '品类（逗号分隔）',
+    `address`         VARCHAR(500)  DEFAULT NULL COMMENT '详细地址',
+    `del_flag`        CHAR(1)       DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+    `create_by`       BIGINT        DEFAULT NULL COMMENT '创建者',
+    `create_time`     DATETIME      DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`       BIGINT        DEFAULT NULL COMMENT '更新者',
+    `update_time`     DATETIME      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `remark`          VARCHAR(500)  DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`supplier_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='供应商信息表';
+
+-- 供应商管理目录
+INSERT INTO `sys_menu` VALUES ('3', '供应商管理', 0, 3, 'supplier', NULL, '', '', 1, 0, 'M', '0', '0', '', 'shopping', 1, sysdate(), NULL, NULL, '供应商管理目录');
+
+-- 供应商管理菜单
+INSERT INTO `sys_menu` VALUES ('301', '供应商列表', 3, 1, 'list', 'system/supplier/index', '', '', 1, 0, 'C', '0', '0', 'system:supplier:list', 'list', 1, sysdate(), NULL, NULL, '供应商列表菜单');
+
+-- 供应商管理按钮
+INSERT INTO `sys_menu` VALUES ('3001', '供应商查询', 301, 1, '', '', '', '', 0, 0, 'F', '0', '0', 'system:supplier:query',   '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('3002', '供应商新增', 301, 2, '', '', '', '', 0, 0, 'F', '0', '0', 'system:supplier:add',     '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('3003', '供应商修改', 301, 3, '', '', '', '', 0, 0, 'F', '0', '0', 'system:supplier:edit',    '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('3004', '供应商删除', 301, 4, '', '', '', '', 0, 0, 'F', '0', '0', 'system:supplier:remove',  '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('3005', '供应商导出', 301, 5, '', '', '', '', 0, 0, 'F', '0', '0', 'system:supplier:export',  '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('3006', '供应商导入', 301, 6, '', '', '', '', 0, 0, 'F', '0', '0', 'system:supplier:import',  '#', 1, sysdate(), NULL, NULL, '');
+
+-- 超级管理员拥有供应商菜单权限
+INSERT INTO `sys_role_menu` VALUES ('1', '3');
+INSERT INTO `sys_role_menu` VALUES ('1', '301');
+INSERT INTO `sys_role_menu` VALUES ('1', '3001');
+INSERT INTO `sys_role_menu` VALUES ('1', '3002');
+INSERT INTO `sys_role_menu` VALUES ('1', '3003');
+INSERT INTO `sys_role_menu` VALUES ('1', '3004');
+INSERT INTO `sys_role_menu` VALUES ('1', '3005');
+INSERT INTO `sys_role_menu` VALUES ('1', '3006');
+
+-- 供应商联系状态字典
+INSERT INTO `sys_dict_type` VALUES (10, '联系状态', 'supplier_contact_status', '0', 1, sysdate(), NULL, NULL, '供应商联系状态');
+INSERT INTO `sys_dict_data` VALUES (100, 1, '未联系',   '0', 'supplier_contact_status', '', 'info',    'Y', '0', 1, sysdate(), NULL, NULL, '未联系');
+INSERT INTO `sys_dict_data` VALUES (101, 2, '已加微信', '1', 'supplier_contact_status', '', 'success', 'N', '0', 1, sysdate(), NULL, NULL, '已加微信');
+INSERT INTO `sys_dict_data` VALUES (102, 3, '未接',     '2', 'supplier_contact_status', '', 'warning', 'N', '0', 1, sysdate(), NULL, NULL, '未接');
+INSERT INTO `sys_dict_data` VALUES (103, 4, '空号',     '3', 'supplier_contact_status', '', 'danger',  'N', '0', 1, sysdate(), NULL, NULL, '空号');
+INSERT INTO `sys_dict_data` VALUES (104, 5, '已下单',   '4', 'supplier_contact_status', '', 'primary', 'N', '0', 1, sysdate(), NULL, NULL, '已下单');
+
+-- 供应商品类字典
+INSERT INTO `sys_dict_type` VALUES (11, '供应商品类', 'supplier_category', '0', 1, sysdate(), NULL, NULL, '供应商品类');
+INSERT INTO `sys_dict_data` VALUES (110, 1, '电子产品',   '电子产品',   'supplier_category', '', 'primary', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (111, 2, '机械设备',   '机械设备',   'supplier_category', '', 'success', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (112, 3, '建材',       '建材',       'supplier_category', '', 'warning', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (113, 4, '食品饮料',   '食品饮料',   'supplier_category', '', 'danger',  'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (114, 5, '纺织服装',   '纺织服装',   'supplier_category', '', 'info',    'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (115, 6, '化工原料',   '化工原料',   'supplier_category', '', 'primary', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (116, 7, '办公用品',   '办公用品',   'supplier_category', '', 'success', 'N', '0', 1, sysdate(), NULL, NULL, '');
+
+-- 供应商省份字典
+INSERT INTO `sys_dict_type` VALUES (12, '省份', 'supplier_province', '0', 1, sysdate(), NULL, NULL, '省份列表');
+INSERT INTO `sys_dict_data` VALUES (120, 1,  '北京', '北京', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (121, 2,  '天津', '天津', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (122, 3,  '河北', '河北', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (123, 4,  '山西', '山西', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (124, 5,  '内蒙古', '内蒙古', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (125, 6,  '辽宁', '辽宁', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (126, 7,  '吉林', '吉林', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (127, 8,  '黑龙江', '黑龙江', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (128, 9,  '上海', '上海', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (129, 10, '江苏', '江苏', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (130, 11, '浙江', '浙江', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (131, 12, '安徽', '安徽', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (132, 13, '福建', '福建', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (133, 14, '江西', '江西', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (134, 15, '山东', '山东', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (135, 16, '河南', '河南', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (136, 17, '湖北', '湖北', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (137, 18, '湖南', '湖南', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (138, 19, '广东', '广东', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (139, 20, '广西', '广西', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (140, 21, '海南', '海南', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (141, 22, '重庆', '重庆', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (142, 23, '四川', '四川', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (143, 24, '贵州', '贵州', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (144, 25, '云南', '云南', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (145, 26, '西藏', '西藏', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (146, 27, '陕西', '陕西', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (147, 28, '甘肃', '甘肃', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (148, 29, '青海', '青海', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (149, 30, '宁夏', '宁夏', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (150, 31, '新疆', '新疆', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (151, 32, '台湾', '台湾', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (152, 33, '香港', '香港', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_dict_data` VALUES (153, 34, '澳门', '澳门', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');

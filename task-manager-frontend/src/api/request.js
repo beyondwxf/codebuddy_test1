@@ -22,6 +22,19 @@ service.interceptors.request.use(
 // 响应拦截器：统一错误处理
 service.interceptors.response.use(
   response => {
+    // blob 类型响应（导出文件等场景）
+    if (response.config.responseType === 'blob') {
+      // 后端返回错误时 Content-Type 为 JSON，需解析错误信息
+      const contentType = response.headers['content-type'] || ''
+      if (contentType.includes('application/json')) {
+        return response.data.text().then(text => {
+          const errorData = JSON.parse(text)
+          ElMessage.error(errorData.message || '导出失败')
+          return Promise.reject(new Error(errorData.message || '导出失败'))
+        })
+      }
+      return response.data
+    }
     const res = response.data
     // code !== 200 视为业务错误
     if (res.code !== 200) {

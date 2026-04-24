@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taskmanager.mapper.SupplierMapper">
+
+    <!-- 供应商结果映射 -->
+    <resultMap id="SupplierResultMap" type="com.taskmanager.domain.Supplier">
+        <id property="supplierId" column="supplier_id"/>
+        <result property="companyName" column="company_name"/>
+        <result property="province" column="province"/>
+        <result property="contactPerson" column="contact_person"/>
+        <result property="phone1" column="phone1"/>
+        <result property="phone2" column="phone2"/>
+        <result property="phone3" column="phone3"/>
+        <result property="phone4" column="phone4"/>
+        <result property="contactStatus" column="contact_status"/>
+        <result property="category" column="category"/>
+        <result property="address" column="address"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!-- 分页查询供应商列表 -->
+    <select id="selectSupplierList" resultMap="SupplierResultMap">
+        SELECT * FROM sys_supplier
+        WHERE del_flag = '0'
+        <if test="companyName != null and companyName != ''">
+            AND company_name LIKE CONCAT('%', #{companyName}, '%')
+        </if>
+        <if test="provinceList != null and provinceList.size() > 0">
+            AND province IN
+            <foreach collection="provinceList" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="contactPerson != null and contactPerson != ''">
+            AND contact_person LIKE CONCAT('%', #{contactPerson}, '%')
+        </if>
+        <if test="categoryList != null and categoryList.size() > 0">
+            AND (
+                <foreach collection="categoryList" item="item" separator=" OR ">
+                    FIND_IN_SET(#{item}, category) > 0
+                </foreach>
+            )
+        </if>
+        <if test="contactStatus != null and contactStatus != ''">
+            AND contact_status = #{contactStatus}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>
