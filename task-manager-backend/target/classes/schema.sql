@@ -418,3 +418,151 @@ INSERT INTO `sys_dict_data` VALUES (150, 31, '新疆', '新疆', 'supplier_provi
 INSERT INTO `sys_dict_data` VALUES (151, 32, '台湾', '台湾', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
 INSERT INTO `sys_dict_data` VALUES (152, 33, '香港', '香港', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
 INSERT INTO `sys_dict_data` VALUES (153, 34, '澳门', '澳门', 'supplier_province', '', '', 'N', '0', 1, sysdate(), NULL, NULL, '');
+
+-- ----------------------------
+-- 12. 仓库表
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_warehouse`;
+CREATE TABLE `wms_warehouse` (
+    `warehouse_id`     BIGINT        NOT NULL AUTO_INCREMENT COMMENT '仓库ID',
+    `warehouse_name`   VARCHAR(100)  NOT NULL COMMENT '仓库名称',
+    `warehouse_code`   VARCHAR(50)   NOT NULL COMMENT '仓库编码',
+    `province`         VARCHAR(50)   DEFAULT NULL COMMENT '省份',
+    `address`          VARCHAR(500)  DEFAULT NULL COMMENT '详细地址',
+    `warehouse_type`   VARCHAR(20)   DEFAULT '0' COMMENT '仓库类型（0自有 1租赁）',
+    `status`           CHAR(1)       DEFAULT '0' COMMENT '状态（0正常 1停用）',
+    `del_flag`         CHAR(1)       DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+    `create_by`        BIGINT        DEFAULT NULL COMMENT '创建者',
+    `create_time`      DATETIME      DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`        BIGINT        DEFAULT NULL COMMENT '更新者',
+    `update_time`      DATETIME      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `remark`           VARCHAR(500)  DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`warehouse_id`),
+    UNIQUE KEY `uk_warehouse_code` (`warehouse_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='仓库信息表';
+
+-- ----------------------------
+-- 13. 商品表
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_product`;
+CREATE TABLE `wms_product` (
+    `product_id`        BIGINT         NOT NULL AUTO_INCREMENT COMMENT '商品ID',
+    `product_name`      VARCHAR(200)   NOT NULL COMMENT '商品名称',
+    `sku_code`          VARCHAR(100)   NOT NULL COMMENT 'SKU编码',
+    `description`       VARCHAR(1000)  DEFAULT NULL COMMENT '商品简介',
+    `preview_image`     VARCHAR(500)   DEFAULT NULL COMMENT '预览图URL',
+    `mobile_content`    LONGTEXT       DEFAULT NULL COMMENT '移动端宣传页内容（富文本）',
+    `sale_price`        DECIMAL(10,2)  DEFAULT 0.00 COMMENT '售价',
+    `purchase_price`    DECIMAL(10,2)  DEFAULT 0.00 COMMENT '进货价',
+    `unit`              VARCHAR(20)    DEFAULT '个' COMMENT '单位',
+    `status`            CHAR(1)        DEFAULT '0' COMMENT '状态（0上架 1下架）',
+    `del_flag`          CHAR(1)        DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+    `create_by`         BIGINT         DEFAULT NULL COMMENT '创建者',
+    `create_time`       DATETIME       DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`         BIGINT         DEFAULT NULL COMMENT '更新者',
+    `update_time`       DATETIME       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `remark`            VARCHAR(500)   DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`product_id`),
+    UNIQUE KEY `uk_sku_code` (`sku_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='商品信息表';
+
+-- ----------------------------
+-- 14. 商品供应商关联表
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_product_supplier`;
+CREATE TABLE `wms_product_supplier` (
+    `id`                  BIGINT        NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `product_id`          BIGINT        NOT NULL COMMENT '商品ID',
+    `supplier_id`         BIGINT        NOT NULL COMMENT '供应商ID',
+    `supplier_sku_code`   VARCHAR(100)  DEFAULT NULL COMMENT '供应商商品编码',
+    `supplier_price`      DECIMAL(10,2) DEFAULT 0.00 COMMENT '供应商报价',
+    `lead_time`           INT           DEFAULT NULL COMMENT '交货周期（天）',
+    `is_default`          CHAR(1)       DEFAULT '0' COMMENT '是否默认供应商（0否 1是）',
+    `del_flag`            CHAR(1)       DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+    `create_by`           BIGINT        DEFAULT NULL COMMENT '创建者',
+    `create_time`         DATETIME      DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`           BIGINT        DEFAULT NULL COMMENT '更新者',
+    `update_time`         DATETIME      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `remark`              VARCHAR(500)  DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_product_supplier` (`product_id`, `supplier_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='商品供应商关联表';
+
+-- ----------------------------
+-- 15. 商品库存表
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_product_inventory`;
+CREATE TABLE `wms_product_inventory` (
+    `id`                BIGINT      NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `product_id`        BIGINT      NOT NULL COMMENT '商品ID',
+    `warehouse_id`      BIGINT      NOT NULL COMMENT '仓库ID',
+    `stock_quantity`    INT         DEFAULT 0 COMMENT '库存数量',
+    `warning_quantity`  INT         DEFAULT 0 COMMENT '预警数量',
+    `del_flag`          CHAR(1)      DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+    `create_by`         BIGINT      DEFAULT NULL COMMENT '创建者',
+    `create_time`       DATETIME    DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`         BIGINT      DEFAULT NULL COMMENT '更新者',
+    `update_time`       DATETIME    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `remark`            VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_product_warehouse` (`product_id`, `warehouse_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='商品库存表';
+
+-- ============================================================
+-- 商品管理菜单数据
+-- ============================================================
+
+-- 商品管理目录（一级）
+INSERT INTO `sys_menu` VALUES ('4', '商品管理', 0, 2, 'wms', NULL, '', '', 1, 0, 'M', '0', '0', '', 'shopping', 1, sysdate(), NULL, NULL, '商品管理目录');
+
+-- 仓库管理菜单（二级）
+INSERT INTO `sys_menu` VALUES ('401', '仓库管理', 4, 1, 'warehouse', 'wms/warehouse/index', '', '', 1, 0, 'C', '0', '0', 'wms:warehouse:list', 'warehouse', 1, sysdate(), NULL, NULL, '仓库管理菜单');
+
+-- 仓库管理按钮
+INSERT INTO `sys_menu` VALUES ('4001', '仓库查询', 401, 1, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:warehouse:query',   '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4002', '仓库新增', 401, 2, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:warehouse:add',     '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4003', '仓库修改', 401, 3, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:warehouse:edit',    '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4004', '仓库删除', 401, 4, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:warehouse:remove',  '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4005', '仓库导出', 401, 5, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:warehouse:export',  '#', 1, sysdate(), NULL, NULL, '');
+
+-- 商品管理菜单（二级）
+INSERT INTO `sys_menu` VALUES ('402', '商品管理', 4, 2, 'product', 'wms/product/index', '', '', 1, 0, 'C', '0', '0', 'wms:product:list', 'component', 1, sysdate(), NULL, NULL, '商品管理菜单');
+
+-- 商品管理按钮
+INSERT INTO `sys_menu` VALUES ('4011', '商品查询', 402, 1, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:product:query',   '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4012', '商品新增', 402, 2, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:product:add',     '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4013', '商品修改', 402, 3, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:product:edit',    '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4014', '商品删除', 402, 4, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:product:remove',  '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4015', '商品导出', 402, 5, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:product:export',  '#', 1, sysdate(), NULL, NULL, '');
+INSERT INTO `sys_menu` VALUES ('4016', '商品导入', 402, 6, '', '', '', '', 0, 0, 'F', '0', '0', 'wms:product:import',  '#', 1, sysdate(), NULL, NULL, '');
+
+-- 超级管理员拥有商品管理菜单权限
+INSERT INTO `sys_role_menu` VALUES ('1', '4');
+INSERT INTO `sys_role_menu` VALUES ('1', '401');
+INSERT INTO `sys_role_menu` VALUES ('1', '4001');
+INSERT INTO `sys_role_menu` VALUES ('1', '4002');
+INSERT INTO `sys_role_menu` VALUES ('1', '4003');
+INSERT INTO `sys_role_menu` VALUES ('1', '4004');
+INSERT INTO `sys_role_menu` VALUES ('1', '4005');
+INSERT INTO `sys_role_menu` VALUES ('1', '402');
+INSERT INTO `sys_role_menu` VALUES ('1', '4011');
+INSERT INTO `sys_role_menu` VALUES ('1', '4012');
+INSERT INTO `sys_role_menu` VALUES ('1', '4013');
+INSERT INTO `sys_role_menu` VALUES ('1', '4014');
+INSERT INTO `sys_role_menu` VALUES ('1', '4015');
+INSERT INTO `sys_role_menu` VALUES ('1', '4016');
+
+-- 仓库类型字典
+INSERT INTO `sys_dict_type` VALUES (20, '仓库类型', 'wms_warehouse_type', '0', 1, sysdate(), NULL, NULL, '仓库类型列表');
+INSERT INTO `sys_dict_data` VALUES (200, 1, '自有', '0', 'wms_warehouse_type', '', 'primary', 'Y', '0', 1, sysdate(), NULL, NULL, '自有仓库');
+INSERT INTO `sys_dict_data` VALUES (201, 2, '租赁', '1', 'wms_warehouse_type', '', 'success', 'N', '0', 1, sysdate(), NULL, NULL, '租赁仓库');
+
+-- 商品状态字典
+INSERT INTO `sys_dict_type` VALUES (21, '商品状态', 'wms_product_status', '0', 1, sysdate(), NULL, NULL, '商品状态列表');
+INSERT INTO `sys_dict_data` VALUES (210, 1, '上架', '0', 'wms_product_status', '', 'success', 'Y', '0', 1, sysdate(), NULL, NULL, '上架');
+INSERT INTO `sys_dict_data` VALUES (211, 2, '下架', '1', 'wms_product_status', '', 'danger',  'N', '0', 1, sysdate(), NULL, NULL, '下架');
+
+-- 是否默认供应商字典
+INSERT INTO `sys_dict_type` VALUES (22, '是否默认', 'wms_is_default', '0', 1, sysdate(), NULL, NULL, '是否默认供应商');
+INSERT INTO `sys_dict_data` VALUES (220, 1, '否', '0', 'wms_is_default', '', 'info',    'Y', '0', 1, sysdate(), NULL, NULL, '否');
+INSERT INTO `sys_dict_data` VALUES (221, 2, '是', '1', 'wms_is_default', '', 'primary', 'N', '0', 1, sysdate(), NULL, NULL, '是');

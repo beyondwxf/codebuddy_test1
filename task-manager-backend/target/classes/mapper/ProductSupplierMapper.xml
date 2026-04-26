@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taskmanager.mapper.ProductSupplierMapper">
+
+    <!-- 商品供应商关联结果映射 -->
+    <resultMap id="ProductSupplierResultMap" type="com.taskmanager.domain.ProductSupplier">
+        <id property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="supplierId" column="supplier_id"/>
+        <result property="supplierSkuCode" column="supplier_sku_code"/>
+        <result property="supplierPrice" column="supplier_price"/>
+        <result property="leadTime" column="lead_time"/>
+        <result property="isDefault" column="is_default"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="companyName" column="company_name"/>
+    </resultMap>
+
+    <!-- 根据商品ID查询供应商列表（含供应商名称） -->
+    <select id="selectByProductId" resultMap="ProductSupplierResultMap">
+        SELECT ps.*, s.contact_person AS supplier_name, s.company_name
+        FROM wms_product_supplier ps
+        LEFT JOIN sys_supplier s ON ps.supplier_id = s.supplier_id
+        WHERE ps.del_flag = '0' AND ps.product_id = #{productId}
+        ORDER BY ps.is_default DESC, ps.create_time
+    </select>
+
+    <!-- 逻辑删除商品的所有供应商关联 -->
+    <update id="logicDeleteByProductId">
+        UPDATE wms_product_supplier SET del_flag = '2'
+        WHERE product_id = #{productId} AND del_flag = '0'
+    </update>
+
+</mapper>

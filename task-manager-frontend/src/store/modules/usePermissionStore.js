@@ -15,6 +15,9 @@ const COMPONENT_MAP = {
   'system/dict/index': () => import('@/views/system/dict/index.vue'),
   // 供应商管理
   'system/supplier/index': () => import('@/views/system/supplier/index.vue'),
+  // 商品管理
+  'wms/warehouse/index': () => import('@/views/wms/warehouse/index.vue'),
+  'wms/product/index': () => import('@/views/wms/product/index.vue'),
   // 系统监控
   'monitor/operlog/index': () => import('@/views/monitor/operlog/index.vue'),
   'monitor/logininfor/index': () => import('@/views/monitor/logininfor/index.vue'),

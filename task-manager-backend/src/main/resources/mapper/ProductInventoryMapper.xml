@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taskmanager.mapper.ProductInventoryMapper">
+
+    <!-- 商品库存结果映射 -->
+    <resultMap id="ProductInventoryResultMap" type="com.taskmanager.domain.ProductInventory">
+        <id property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="stockQuantity" column="stock_quantity"/>
+        <result property="warningQuantity" column="warning_quantity"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="warehouseName" column="warehouse_name"/>
+        <result property="warehouseCode" column="warehouse_code"/>
+    </resultMap>
+
+    <!-- 根据商品ID查询库存列表（含仓库名称） -->
+    <select id="selectByProductId" resultMap="ProductInventoryResultMap">
+        SELECT pi.*, w.warehouse_name, w.warehouse_code
+        FROM wms_product_inventory pi
+        LEFT JOIN wms_warehouse w ON pi.warehouse_id = w.warehouse_id
+        WHERE pi.del_flag = '0' AND pi.product_id = #{productId}
+        ORDER BY pi.create_time
+    </select>
+
+    <!-- 逻辑删除商品的所有库存记录 -->
+    <update id="logicDeleteByProductId">
+        UPDATE wms_product_inventory SET del_flag = '2'
+        WHERE product_id = #{productId} AND del_flag = '0'
+    </update>
+
+</mapper>
