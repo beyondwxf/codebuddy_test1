@@ -407,3 +407,151 @@ INSERT INTO `sys_logininfor` VALUES (14, 'deleted_user','127.0.0.1','本地',   
 --   - 成功: 7 条（多用户/多IP/多终端）
 --   - 失败: 7 条（密码错误/验证码错误/停用/不存在/已删除）
 --
+
+-- ============================================================
+-- 十一、电商模块测试数据
+-- 覆盖：电商客户用户、商品、库存、购物车、订单（全状态）
+-- ============================================================
+
+-- -------------------- 1. 电商客户用户 --------------------
+-- customer1 / 密码 Admin@2026 — 张小明
+-- customer2 / 密码 Admin@2026 — 李小红
+-- 密码统一使用 BCrypt 加密的 "Admin@2026"
+INSERT INTO `sys_user` VALUES (101, 100, 'customer1', '张小明', '00', 'customer1@test.com', '13800001001', '0', '', '$2a$10$22BUeamzvjXTPmgwFVMQZedEJFW41hRtWsvbtHUzDjt5V9OpOd.N2', '0', '0', '', NULL, 1, sysdate(), NULL, NULL, '电商测试客户1');
+INSERT INTO `sys_user` VALUES (102, 100, 'customer2', '李小红', '00', 'customer2@test.com', '13800001002', '1', '', '$2a$10$22BUeamzvjXTPmgwFVMQZedEJFW41hRtWsvbtHUzDjt5V9OpOd.N2', '0', '0', '', NULL, 1, sysdate(), NULL, NULL, '电商测试客户2');
+
+-- 分配普通角色 (roleId=2)
+INSERT INTO `sys_user_role` VALUES (101, 2);
+INSERT INTO `sys_user_role` VALUES (102, 2);
+
+-- -------------------- 2. 电商测试商品（product_id 101-120） --------------------
+
+-- 数码电子类
+INSERT INTO `wms_product` VALUES (101, 'iPhone 16 Pro Max 256GB', 'PHONE-IP16PM-256', '苹果最新旗舰手机，A18 Pro芯片，钛金属边框，4800万像素摄像头', 'https://picsum.photos/seed/iphone16/400/400', '<h3>iPhone 16 Pro Max</h3><p>全新设计，更强性能</p><ul><li>A18 Pro仿生芯片</li><li>6.9英寸超视网膜XDR显示屏</li><li>4800万像素主摄</li><li>钛金属设计</li></ul>', 9999.00, 7800.00, '台', '0', '0', 1, sysdate(), NULL, NULL, '旗舰手机');
+INSERT INTO `wms_product` VALUES (102, 'MacBook Air M3 13英寸', 'LAPTOP-MBA-M3-13', '轻薄笔记本电脑，M3芯片，18小时续航，Liquid Retina显示屏', 'https://picsum.photos/seed/macbook/400/400', '<h3>MacBook Air M3</h3><p>轻盈强大，随身携带</p><ul><li>M3芯片</li><li>8核CPU+10核GPU</li><li>18小时电池续航</li><li>仅1.24kg</li></ul>', 8999.00, 7200.00, '台', '0', '0', 1, sysdate(), NULL, NULL, '热销笔记本');
+INSERT INTO `wms_product` VALUES (103, '索尼 WH-1000XM5 头戴式耳机', 'HEADPHONE-SONY-XM5', '行业领先降噪，30小时续航，LDAC高品质音频传输', 'https://picsum.photos/seed/sonyxm5/400/400', '<h3>Sony WH-1000XM5</h3><p>静享纯粹音质</p><ul><li>行业领先降噪</li><li>30小时续航</li><li>LDAC/DSEE Extreme</li></ul>', 2499.00, 1800.00, '个', '0', '0', 1, sysdate(), NULL, NULL, '降噪耳机');
+INSERT INTO `wms_product` VALUES (104, 'iPad Air M2 11英寸 256GB', 'TABLET-IPAD-AIR-M2', 'M2芯片驱动，Liquid Retina显示屏，支持Apple Pencil Pro', 'https://picsum.photos/seed/ipadair/400/400', '<h3>iPad Air M2</h3><p>创造力新体验</p><ul><li>M2芯片</li><li>11英寸Liquid Retina</li><li>支持Apple Pencil Pro</li></ul>', 4799.00, 3800.00, '台', '0', '0', 1, sysdate(), NULL, NULL, '平板电脑');
+INSERT INTO `wms_product` VALUES (105, 'AirPods Pro 2 Type-C版', 'EARBUDS-APP2-USBC', '自适应降噪，个性化空间音频，USB-C充电，6小时续航', 'https://picsum.photos/seed/airpods/400/400', '<h3>AirPods Pro 2</h3><ul><li>自适应降噪</li><li>个性化空间音频</li><li>USB-C充电</li><li>IP54防水</li></ul>', 1799.00, 1350.00, '个', '0', '0', 1, sysdate(), NULL, NULL, '无线耳机');
+
+-- 服饰鞋包类
+INSERT INTO `wms_product` VALUES (106, 'Nike Air Force 1 经典白色', 'SHOE-NIKE-AF1-WHT', '经典款运动鞋，全白配色，百搭潮流必备', 'https://picsum.photos/seed/nikeaf1/400/400', '<h3>Nike Air Force 1</h3><p>经典永不过时</p><ul><li>全粒面皮革鞋面</li><li>Air-Sole气垫</li><li>耐磨橡胶外底</li></ul>', 799.00, 420.00, '双', '0', '0', 1, sysdate(), NULL, NULL, '经典运动鞋');
+INSERT INTO `wms_product` VALUES (107, 'Levi''s 501 经典直筒牛仔裤', 'JEAN-LEVIS-501-BLU', '经典原版剪裁，100%纯棉丹宁面料，纽扣门襟', 'https://picsum.photos/seed/levis501/400/400', '<h3>Levi''s 501 Original</h3><p>牛仔经典，始于1873</p><ul><li>100%纯棉</li><li>经典直筒版型</li><li>纽扣门襟设计</li></ul>', 699.00, 350.00, '条', '0', '0', 1, sysdate(), NULL, NULL, '经典牛仔裤');
+INSERT INTO `wms_product` VALUES (108, 'Samsonite 新秀丽商务双肩包', 'BAG-SAMS-BP-BLK', '商务通勤双肩包，防泼水面料，15.6英寸笔记本隔层', 'https://picsum.photos/seed/samsonite/400/400', '<h3>Samsonite商务背包</h3><ul><li>防泼水面料</li><li>15.6寸笔记本隔层</li><li>多功能分区</li><li>减压背负系统</li></ul>', 599.00, 280.00, '个', '0', '0', 1, sysdate(), NULL, NULL, '商务背包');
+
+-- 家居生活类
+INSERT INTO `wms_product` VALUES (109, '戴森 V15 Detect 无绳吸尘器', 'HOME-DYSON-V15', '激光探测灰尘，智能吸力调节，60分钟续航', 'https://picsum.photos/seed/dysonv15/400/400', '<h3>Dyson V15 Detect</h3><p>看见看不见的灰尘</p><ul><li>激光灰尘探测</li><li>智能吸力调节</li><li>LCD实时显示</li><li>60分钟续航</li></ul>', 4490.00, 3200.00, '台', '0', '0', 1, sysdate(), NULL, NULL, '旗舰吸尘器');
+INSERT INTO `wms_product` VALUES (110, '小米空气净化器 4 Pro', 'HOME-MI-AIR4PRO', 'CADR值500m³/h，OLED触控屏，支持米家APP控制', 'https://picsum.photos/seed/miair/400/400', '<h3>小米空气净化器4 Pro</h3><ul><li>CADR 500m³/h</li><li>OLED触控屏</li><li>支持米家联动</li><li>静音模式33dB</li></ul>', 1499.00, 900.00, '台', '0', '0', 1, sysdate(), NULL, NULL, '空气净化');
+INSERT INTO `wms_product` VALUES (111, 'MUJI 超声波香薰机', 'HOME-MUJI-AROMA', '超声波雾化，两段光线调节，自动关机功能', 'https://picsum.photos/seed/mujiaroma/400/400', '<h3>MUJI 超声波香薰机</h3><ul><li>超声波雾化技术</li><li>两段灯光</li><li>静音运行</li><li>自动关机</li></ul>', 380.00, 180.00, '个', '0', '0', 1, sysdate(), NULL, NULL, '香薰机');
+
+-- 美妆护肤类
+INSERT INTO `wms_product` VALUES (112, 'SK-II 神仙水 230ml', 'BEAUTY-SKII-FTE-230', '90%以上PITERA精华，改善肤质，提亮肤色', 'https://picsum.photos/seed/sk2fte/400/400', '<h3>SK-II 护肤精华露</h3><p>改写肌肤命运</p><ul><li>90%+PITERA精华</li><li>改善肤质</li><li>提亮肤色</li><li>细腻毛孔</li></ul>', 1540.00, 980.00, '瓶', '0', '0', 1, sysdate(), NULL, NULL, '明星单品');
+INSERT INTO `wms_product` VALUES (113, '兰蔻小黑瓶精华液 50ml', 'BEAUTY-LANCOME-AGS-50', '第二代小黑瓶，微生态科技，修护肌肤屏障', 'https://picsum.photos/seed/lancome/400/400', '<h3>兰蔻小黑瓶精华</h3><ul><li>微生态护肤科技</li><li>修护肌肤屏障</li><li>提升肌肤光泽</li></ul>', 1080.00, 650.00, '瓶', '0', '0', 1, sysdate(), NULL, NULL, '精华液');
+
+-- 食品饮品类
+INSERT INTO `wms_product` VALUES (114, '三顿半精品速溶咖啡 24颗装', 'FOOD-3HALF-COFFEE-24', '超即溶冷萃咖啡，3秒速溶，多风味混合装', 'https://picsum.photos/seed/coffee3half/400/400', '<h3>三顿半超即溶咖啡</h3><ul><li>冷萃工艺</li><li>3秒速溶</li><li>0糖0脂</li><li>多种风味</li></ul>', 169.00, 85.00, '盒', '0', '0', 1, sysdate(), NULL, NULL, '精品咖啡');
+INSERT INTO `wms_product` VALUES (115, '农夫山泉东方树叶 500ml*15瓶', 'FOOD-NFS-TEA-15', '0糖0卡0脂，纯茶萃取，多口味混合装', 'https://picsum.photos/seed/dongfang/400/400', '<h3>东方树叶 混合装</h3><ul><li>0糖0卡0脂</li><li>茉莉花茶/乌龙茶/红茶</li><li>纯茶萃取</li></ul>', 75.00, 42.00, '箱', '0', '0', 1, sysdate(), NULL, NULL, '无糖茶饮');
+
+-- 运动户外类
+INSERT INTO `wms_product` VALUES (116, 'Keep 智能动感单车 C1', 'SPORT-KEEP-BIKE-C1', '家用静音磁控，支持Keep APP课程，阻力32档调节', 'https://picsum.photos/seed/keepbike/400/400', '<h3>Keep C1 动感单车</h3><ul><li>磁控静音</li><li>32档阻力</li><li>Keep APP联动</li><li>承重120kg</li></ul>', 1999.00, 1200.00, '台', '0', '0', 1, sysdate(), NULL, NULL, '居家健身');
+INSERT INTO `wms_product` VALUES (117, 'Yonex 尤尼克斯羽毛球拍 ARC11', 'SPORT-YNX-ARC11', '弓箭11经典款，高弹碳素，适合进阶选手', 'https://picsum.photos/seed/yonex/400/400', '<h3>Yonex ARC-11</h3><ul><li>高弹碳素框架</li><li>T型接头技术</li><li>进阶级推荐</li></ul>', 1080.00, 620.00, '支', '0', '0', 1, sysdate(), NULL, NULL, '羽毛球拍');
+
+-- 图书文具类
+INSERT INTO `wms_product` VALUES (118, '得力办公文具套装 15件', 'OFFICE-DELI-SET15', '包含订书机、计算器、剪刀、胶带等15件常用办公文具', 'https://picsum.photos/seed/delioffice/400/400', '<h3>得力办公套装</h3><ul><li>15件实用文具</li><li>订书机/计算器/剪刀</li><li>送礼盒包装</li></ul>', 89.00, 42.00, '套', '0', '0', 1, sysdate(), NULL, NULL, '办公套装');
+INSERT INTO `wms_product` VALUES (119, 'Kindle Paperwhite 5 电子书阅读器', 'EBOOK-KINDLE-PW5', '6.8英寸E-Ink屏，冷暖调光，IPX8防水，32GB存储', 'https://picsum.photos/seed/kindle/400/400', '<h3>Kindle Paperwhite 5</h3><ul><li>6.8寸E-Ink屏</li><li>冷暖光调节</li><li>IPX8级防水</li><li>10周续航</li></ul>', 1068.00, 780.00, '台', '0', '0', 1, sysdate(), NULL, NULL, '电子阅读');
+INSERT INTO `wms_product` VALUES (120, '猫王小王子 OTR 便携蓝牙音箱', 'AUDIO-MWANG-OTR', '复古设计，锌合金机身，蓝牙5.0，10小时续航', 'https://picsum.photos/seed/catking/400/400', '<h3>猫王小王子OTR</h3><ul><li>复古经典设计</li><li>锌合金机身</li><li>蓝牙5.0</li><li>10小时续航</li></ul>', 399.00, 210.00, '台', '0', '0', 1, sysdate(), NULL, NULL, '复古音箱');
+
+-- -------------------- 3. 新商品库存（inventory_id 201-235） --------------------
+INSERT INTO `wms_product_inventory` VALUES (201, 101, 1, 50, 10, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (202, 101, 3, 30, 5, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (203, 102, 1, 40, 8, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (204, 102, 4, 25, 5, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (205, 103, 1, 100, 15, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (206, 103, 2, 60, 10, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (207, 104, 1, 35, 8, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (208, 104, 3, 20, 5, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (209, 105, 1, 200, 30, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (210, 105, 2, 80, 15, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (211, 106, 1, 150, 20, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (212, 106, 4, 80, 15, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (213, 107, 2, 120, 20, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (214, 107, 3, 60, 10, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (215, 108, 1, 90, 15, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (216, 109, 1, 25, 5, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (217, 109, 4, 15, 3, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (218, 110, 1, 80, 10, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (219, 110, 2, 50, 8, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (220, 111, 1, 200, 30, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (221, 112, 1, 60, 10, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (222, 112, 4, 40, 8, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (223, 113, 1, 70, 10, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (224, 114, 1, 300, 50, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (225, 114, 2, 200, 30, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (226, 115, 1, 500, 80, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (227, 115, 2, 300, 50, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (228, 116, 1, 20, 5, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (229, 117, 1, 45, 8, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (230, 117, 3, 30, 5, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (231, 118, 1, 400, 60, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (232, 118, 2, 250, 40, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (233, 119, 1, 55, 10, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (234, 120, 1, 100, 15, '0', 1, sysdate(), NULL, NULL, NULL);
+INSERT INTO `wms_product_inventory` VALUES (235, 120, 2, 60, 10, '0', 1, sysdate(), NULL, NULL, NULL);
+
+-- -------------------- 4. 购物车测试数据 --------------------
+-- customer1 的购物车（3件商品）
+INSERT INTO `ecommerce_cart` VALUES (1, 101, 101, 1, sysdate(), sysdate());
+INSERT INTO `ecommerce_cart` VALUES (2, 101, 106, 2, sysdate(), sysdate());
+INSERT INTO `ecommerce_cart` VALUES (3, 101, 114, 3, sysdate(), sysdate());
+
+-- customer2 的购物车（2件商品）
+INSERT INTO `ecommerce_cart` VALUES (4, 102, 103, 1, sysdate(), sysdate());
+INSERT INTO `ecommerce_cart` VALUES (5, 102, 112, 1, sysdate(), sysdate());
+
+-- -------------------- 5. 订单测试数据（全状态覆盖） --------------------
+-- customer1 的订单
+-- 订单1: 已完成 (status=3)
+INSERT INTO `ecommerce_order` VALUES (1, '20260401100000000001', 101, 1598.00, 3, '张小明', '13800001001', '广东省深圳市南山区科技园路1号', '', sysdate() - INTERVAL 20 DAY, sysdate() - INTERVAL 15 DAY);
+INSERT INTO `ecommerce_order_item` VALUES (1, 1, 106, 'Nike Air Force 1 经典白色', 799.00, 2, 1598.00);
+
+-- 订单2: 已发货 (status=2)
+INSERT INTO `ecommerce_order` VALUES (2, '20260415140000000002', 101, 2499.00, 2, '张小明', '13800001001', '广东省深圳市南山区科技园路1号', '请工作日送货', sysdate() - INTERVAL 5 DAY, sysdate() - INTERVAL 3 DAY);
+INSERT INTO `ecommerce_order_item` VALUES (2, 2, 103, '索尼 WH-1000XM5 头戴式耳机', 2499.00, 1, 2499.00);
+
+-- 订单3: 待付款 (status=0)
+INSERT INTO `ecommerce_order` VALUES (3, '20260427090000000003', 101, 9168.00, 0, '张小明', '13800001001', '广东省深圳市南山区科技园路1号', '', sysdate(), sysdate());
+INSERT INTO `ecommerce_order_item` VALUES (3, 3, 102, 'MacBook Air M3 13英寸', 8999.00, 1, 8999.00);
+INSERT INTO `ecommerce_order_item` VALUES (4, 3, 114, '三顿半精品速溶咖啡 24颗装', 169.00, 1, 169.00);
+
+-- 订单4: 已取消 (status=4)
+INSERT INTO `ecommerce_order` VALUES (4, '20260410080000000004', 101, 4490.00, 4, '张小明', '13800001001', '广东省深圳市南山区科技园路1号', '', sysdate() - INTERVAL 17 DAY, sysdate() - INTERVAL 16 DAY);
+INSERT INTO `ecommerce_order_item` VALUES (5, 4, 109, '戴森 V15 Detect 无绳吸尘器', 4490.00, 1, 4490.00);
+
+-- customer2 的订单
+-- 订单5: 已付款 (status=1)
+INSERT INTO `ecommerce_order` VALUES (5, '20260425160000000005', 102, 2620.00, 1, '李小红', '13800001002', '湖南省长沙市岳麓区麓谷大道88号', '尽快发货', sysdate() - INTERVAL 2 DAY, sysdate() - INTERVAL 1 DAY);
+INSERT INTO `ecommerce_order_item` VALUES (6, 5, 112, 'SK-II 神仙水 230ml', 1540.00, 1, 1540.00);
+INSERT INTO `ecommerce_order_item` VALUES (7, 5, 113, '兰蔻小黑瓶精华液 50ml', 1080.00, 1, 1080.00);
+
+-- 订单6: 已完成 (status=3)
+INSERT INTO `ecommerce_order` VALUES (6, '20260320120000000006', 102, 1068.00, 3, '李小红', '13800001002', '湖南省长沙市岳麓区麓谷大道88号', '', sysdate() - INTERVAL 38 DAY, sysdate() - INTERVAL 30 DAY);
+INSERT INTO `ecommerce_order_item` VALUES (8, 6, 119, 'Kindle Paperwhite 5 电子书阅读器', 1068.00, 1, 1068.00);
+
+-- 订单7: 待付款 (status=0)
+INSERT INTO `ecommerce_order` VALUES (7, '20260427153000000007', 102, 1999.00, 0, '李小红', '13800001002', '湖南省长沙市岳麓区麓谷大道88号', '', sysdate(), sysdate());
+INSERT INTO `ecommerce_order_item` VALUES (9, 7, 116, 'Keep 智能动感单车 C1', 1999.00, 1, 1999.00);
+
+-- ============================================================
+-- 电商模块数据统计汇总
+-- ============================================================
+-- 【电商客户用户 sys_user】共 2 条（user_id 101~102）
+-- 【电商商品 wms_product】共 20 条（product_id 101~120）
+-- 【电商商品库存 wms_product_inventory】共 35 条（inventory_id 201~235）
+-- 【购物车 ecommerce_cart】共 5 条
+-- 【订单 ecommerce_order】共 7 条
+--   - 待付款(0): 2 条（订单3、订单7）
+--   - 已付款(1): 1 条（订单5）
+--   - 已发货(2): 1 条（订单2）
+--   - 已完成(3): 2 条（订单1、订单6）
+--   - 已取消(4): 1 条（订单4）
+-- 【订单项 ecommerce_order_item】共 9 条
+--

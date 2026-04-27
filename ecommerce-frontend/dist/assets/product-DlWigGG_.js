@@ -1,0 +1,1 @@
+import{s as r}from"./request-DymONMLU.js";function s(t){return r({url:"/api/shop/products",method:"get",params:t})}function e(t){return r({url:"/api/shop/products/"+t,method:"get"})}export{e as g,s as l};

@@ -1,6 +1,8 @@
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\SysDeptMapper.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\controller\CartController.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\common\annotation\Log.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\Supplier.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\controller\ShopController.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\security\LoginUser.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\SysRoleMapper.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\UserMapper.java
@@ -12,6 +14,7 @@ C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskm
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\ProductInventoryMapper.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\config\SecurityConfig.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\common\Result.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\Cart.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\SysOperLog.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\SysRole.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\SupplierMapper.java
@@ -44,6 +47,7 @@ C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskm
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\common\utils\TableDataInfo.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\controller\SupplierController.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\SysMenu.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\controller\OrderController.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\SysLogininfor.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\common\exception\ServiceException.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\common\enums\BusinessTypeEnum.java
@@ -56,13 +60,18 @@ C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskm
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\entity\Task.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\security\TokenService.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\utils\JwtUtil.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\OrderMapper.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\OrderItemMapper.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\Order.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\controller\SysOperlogController.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\common\exception\CaptchaException.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\config\RedisConfig.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\SysUserRole.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\security\CaptchaService.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\OrderItem.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\domain\ProductSupplier.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\SysUserMapper.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\config\MybatisPlusConfig.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\aspect\LogAspect.java
+C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\mapper\CartMapper.java
 C:\dev\code\ai_code\codebuddy_test1\task-manager-backend\src\main\java\com\taskmanager\util\PasswordGenerator.java

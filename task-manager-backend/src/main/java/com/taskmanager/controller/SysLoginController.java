@@ -5,10 +5,14 @@ import com.taskmanager.domain.SysMenu;
 import com.taskmanager.domain.SysUser;
 import com.taskmanager.mapper.SysMenuMapper;
 import com.taskmanager.mapper.SysRoleMapper;
+import com.taskmanager.mapper.SysUserMapper;
+import com.taskmanager.mapper.SysUserRoleMapper;
+import com.taskmanager.domain.SysUserRole;
 import com.taskmanager.security.CaptchaService;
 import com.taskmanager.security.LoginUser;
 import com.taskmanager.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,6 +47,48 @@ public class SysLoginController {
     @Autowired
     private SysRoleMapper roleMapper;
 
+    @Autowired
+    private SysUserMapper userMapper;
+
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    /**
+     * 用户注册
+     */
+    @PostMapping("/register")
+    public Result<Void> register(@RequestBody RegisterDTO dto) {
+        if (dto.getUserName() == null || dto.getUserName().trim().isEmpty()) {
+            return Result.error("用户名不能为空");
+        }
+        if (dto.getPassword() == null || dto.getPassword().trim().isEmpty()) {
+            return Result.error("密码不能为空");
+        }
+        SysUser existing = userMapper.selectByUserName(dto.getUserName().trim());
+        if (existing != null) {
+            return Result.error("用户名已存在");
+        }
+        SysUser user = new SysUser();
+        user.setUserName(dto.getUserName().trim());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setNickName(dto.getNickName());
+        user.setPhonenumber(dto.getPhonenumber());
+        user.setStatus("0");
+        user.setUserType("00");
+        user.setDeptId(100L);
+        user.setDelFlag("0");
+        user.setCreateTime(new java.util.Date());
+        userMapper.insert(user);
+        SysUserRole userRole = new SysUserRole();
+        userRole.setUserId(user.getUserId());
+        userRole.setRoleId(2L);
+        userRoleMapper.insert(userRole);
+        return Result.success();
+    }
+
     /**
      * 获取图形验证码
      */
@@ -67,6 +113,10 @@ public class SysLoginController {
         }
         String userName = loginDTO.getUserName();
         String password = loginDTO.getPassword();
+        
+        // 调试日志：打印登录请求信息
+        System.out.println("[DEBUG] 登录请求 - 用户名: " + userName);
+        
         // 2. Spring Security 身份认证
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(userName, password)
@@ -217,6 +267,15 @@ public class SysLoginController {
             return "Layout";
         }
         return component;
+    }
+
+    /** 注册请求 DTO */
+    @lombok.Data
+    public static class RegisterDTO {
+        private String userName;
+        private String password;
+        private String nickName;
+        private String phonenumber;
     }
 
     /** 登录请求 DTO */

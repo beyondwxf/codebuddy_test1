@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taskmanager.mapper.CartMapper">
+
+    <select id="selectCartListByUserId" resultType="com.taskmanager.domain.Cart">
+        SELECT c.cart_id, c.user_id, c.product_id, c.quantity, c.create_time, c.update_time,
+               p.product_name, p.preview_image, p.sale_price, p.unit
+        FROM ecommerce_cart c
+        LEFT JOIN wms_product p ON c.product_id = p.product_id AND p.del_flag = '0'
+        WHERE c.user_id = #{userId}
+        ORDER BY c.create_time DESC
+    </select>
+
+</mapper>

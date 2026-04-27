@@ -89,4 +89,8 @@ public class Product implements Serializable {
     /** 商品库存列表（非数据库字段） */
     @TableField(exist = false)
     private List<ProductInventory> inventoryList;
+
+    /** 总库存数量（非数据库字段） */
+    @TableField(exist = false)
+    private Integer totalStock;
 }

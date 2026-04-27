@@ -47,6 +47,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            // 启用 CORS 支持（使用 CorsConfig 中定义的配置）
+            .cors(cors -> {})
             // 禁用 CSRF（前后端分离，Token 认证无需 CSRF）
             .csrf(csrf -> csrf.disable())
             // 基于 Token 的无状态会话（不使用 Session）
@@ -74,7 +76,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // 放行认证相关接口（无需登录即可访问）
                 .requestMatchers(new AntPathRequestMatcher("/api/auth/login")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/auth/register")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/auth/captcha")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/shop/products/**")).permitAll()
                 // 放行 Knife4j API 文档
                 .requestMatchers(new AntPathRequestMatcher("/doc.html")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/webjars/**")).permitAll()

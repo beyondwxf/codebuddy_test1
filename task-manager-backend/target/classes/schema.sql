@@ -566,3 +566,42 @@ INSERT INTO `sys_dict_data` VALUES (211, 2, '下架', '1', 'wms_product_status',
 INSERT INTO `sys_dict_type` VALUES (22, '是否默认', 'wms_is_default', '0', 1, sysdate(), NULL, NULL, '是否默认供应商');
 INSERT INTO `sys_dict_data` VALUES (220, 1, '否', '0', 'wms_is_default', '', 'info',    'Y', '0', 1, sysdate(), NULL, NULL, '否');
 INSERT INTO `sys_dict_data` VALUES (221, 2, '是', '1', 'wms_is_default', '', 'primary', 'N', '0', 1, sysdate(), NULL, NULL, '是');
+
+-- ==================== 电商模块表 ====================
+
+-- 购物车表
+CREATE TABLE IF NOT EXISTS ecommerce_cart (
+  cart_id      BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id      BIGINT NOT NULL,
+  product_id   BIGINT NOT NULL,
+  quantity     INT NOT NULL DEFAULT 1,
+  create_time  DATETIME DEFAULT CURRENT_TIMESTAMP,
+  update_time  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uk_user_product (user_id, product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物车表';
+
+-- 订单主表
+CREATE TABLE IF NOT EXISTS ecommerce_order (
+  order_id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_no       VARCHAR(32) NOT NULL UNIQUE,
+  user_id        BIGINT NOT NULL,
+  total_amount   DECIMAL(10,2) NOT NULL,
+  status         TINYINT DEFAULT 0 COMMENT '0=待付款,1=已付款,2=已发货,3=已完成,4=已取消',
+  receiver_name  VARCHAR(50),
+  receiver_phone VARCHAR(20),
+  receiver_address VARCHAR(500),
+  remark         VARCHAR(500),
+  create_time    DATETIME DEFAULT CURRENT_TIMESTAMP,
+  update_time    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单主表';
+
+-- 订单明细表
+CREATE TABLE IF NOT EXISTS ecommerce_order_item (
+  item_id      BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_id     BIGINT NOT NULL,
+  product_id   BIGINT NOT NULL,
+  product_name VARCHAR(200),
+  sale_price   DECIMAL(10,2),
+  quantity     INT NOT NULL,
+  subtotal     DECIMAL(10,2)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';

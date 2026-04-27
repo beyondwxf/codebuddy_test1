@@ -39,14 +39,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1. 查询用户基本信息
+        System.out.println("[DEBUG] 尝试加载用户: " + username);
         SysUser user = userMapper.selectByUserName(username);
         if (user == null) {
+            System.out.println("[DEBUG] 用户不存在: " + username);
             throw new UsernameNotFoundException("用户: " + username + " 不存在");
         }
+        System.out.println("[DEBUG] 找到用户 - ID: " + user.getUserId() + ", 用户名: " + user.getUserName() + ", 状态: " + user.getStatus() + ", 删除标志: " + user.getDelFlag());
+        System.out.println("[DEBUG] 用户密码哈希: " + user.getPassword());
         // 2. 查询用户角色列表
         List<SysRole> roles = roleMapper.selectRolesByUserId(user.getUserId());
+        System.out.println("[DEBUG] 用户角色数量: " + (roles != null ? roles.size() : 0));
         // 3. 查询用户权限标识集合（通过角色的菜单权限）
         Set<String> permissions = menuMapper.selectPermsByUserId(user.getUserId());
+        System.out.println("[DEBUG] 用户权限数量: " + (permissions != null ? permissions.size() : 0));
         return new LoginUser(user, permissions, roles);
     }
 }
